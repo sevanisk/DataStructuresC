@@ -1,0 +1,299 @@
+        void insert(const Comparable& other){
+            cout << "INSERT " << endl;
+            if(root == nullptr){
+                root = new Node(other);
+            }
+            else{
+                cout << "got here" << endl;
+                cout << other << endl;
+                insert(other, root);      
+            }   
+        }
+
+        void insert(const Comparable& other, Node* rot){
+            if(rot->value == other){
+                return;
+            }
+            else if(other > rot->value){
+                cout << "bigger than " << rot->value << endl;
+                if(rot->right == nullptr){
+                    rot->right == new Node(other);
+                }
+                else{
+                    insert(other, rot->right);
+                }
+            }
+            else if(other < rot->value){
+                cout << "smaller than " << rot->value << endl;
+                if(rot->left == nullptr){
+                    rot->left == new Node(other);
+                }
+                else{
+                    insert(other, rot->left);
+                }
+            }   
+        }
+
+
+                    Comparable temp2 = rot->value;
+                    rot->value = rot->left->value;
+                    rot->left->value = temp2;
+                    delete rot->left;
+
+
+//rot->left = rot->left->left;
+                    //rot->right = rot->left->right;
+
+
+        void remove(const Comparable& other, Node* rot){
+            if(rot->value == other){
+                if(rot->right == nullptr && rot->left == nullptr){
+                    cout << "hi sophia i am here" << endl;
+                    delete rot;
+
+                }
+                else if(rot->right != nullptr && rot->left != nullptr){
+                    Node* temp = find_largest(rot->right);
+                    rot->value = temp->value;
+                    remove(temp->value, rot->right);
+                }
+                else if(rot->right == nullptr){
+                    rot->value = rot->left->value;
+                    rot->right = rot->left->right;
+                    Node* temp = rot->left->left;
+                    delete rot->left;
+                    rot->left = temp;
+                    
+                }
+                else{
+                    rot->value = rot->right->value;
+                    rot->left = rot->right->left;
+                    Node* temp = rot->right->right;
+                    delete rot->right;
+                    rot->right = temp;
+                }
+
+            }
+            else if(other > rot->value){
+                remove(other, rot->right);
+            }
+            else if(other < rot->value){
+                remove(other, rot->left);
+            }
+
+        }
+
+
+
+
+if(other > rot->value){
+                cout << other << " bigger than " << rot->value << endl;
+                if(rot->right == nullptr){
+                    rot->right = new Node(other);
+                }
+                else{
+                    insert(other, rot->right);
+                }
+            }
+            else if(other < rot->value){
+                cout << other << " smaller than " << rot->value << endl;
+                if(rot->left == nullptr){
+                    rot->left = new Node(other);
+                }
+                else{
+                    insert(other, rot->left);
+                }
+            }   
+
+
+const Comparable& find_min() const{
+            if(root == nullptr){
+                throw invalid_argument("empty");
+            }
+            return find_min(root);
+        }
+
+        const Comparable& find_min(Node* rot) const{
+            if(rot->left == nullptr){
+                return rot->value;
+            }
+            return find_min(rot->left);
+        }
+
+
+        const Comparable& find_max() const{
+            if(root == nullptr){
+                throw invalid_argument("empty");
+            }
+            return find_max(root);
+        }
+
+        const Comparable& find_max(Node* rot) const{
+            if(rot->right == nullptr){
+                return rot->value;
+            }
+
+            return find_max(rot->right);
+        }
+
+
+
+void remove(const Comparable& other, Node* rot){
+        bool is_leaf = false;
+        if(rot->value == other){
+            if(rot->right == nullptr && rot->left == nullptr){
+                cout << "hi sophia i am here" << endl;
+                delete rot;
+
+            }
+            else if(rot->right != nullptr && rot->left != nullptr){
+                Node* temp = find_smallest(rot->right);
+                rot->value = temp->value;
+                is_leaf = next_is_leaf(rot->right);
+                remove(temp->value, rot->right);
+                if(is_leaf){
+                    rot->right = nullptr;
+                }
+            }
+            else if(rot->right == nullptr){
+                rot->value = rot->left->value;
+                rot->right = rot->left->right;
+                Node* temp = rot->left->left;
+                delete rot->left;
+                rot->left = temp;
+                
+            }
+            else{
+                rot->value = rot->right->value;
+                rot->left = rot->right->left;
+                Node* temp = rot->right->right;
+                delete rot->right;
+                rot->right = temp;
+            }
+
+        }
+        else if(other > rot->value){
+            is_leaf = next_is_leaf(rot->right);
+            remove(other, rot->right);
+            if(is_leaf){
+                rot->right = nullptr;
+            }
+        }
+        else if(other < rot->value){
+            is_leaf = next_is_leaf(rot->left);
+            remove(other, rot->left);
+            if(is_leaf){
+                rot->left = nullptr;
+            }
+        }
+
+    }
+
+        bool next_is_leaf(Node* rot){
+        if(rot->right == nullptr && rot->left == nullptr){
+            return true;
+        }
+        return false;
+    }
+
+
+            if(other < rot->value){
+            if(rot->left->value != other){
+                return find_parent(other, rot->left); 
+            }
+        }
+        else if(other > rot->value){
+            if(rot->right->value != other){
+                return find_parent(other, rot->right);
+            }
+        }
+        return rot;
+
+
+
+        void remove(const Comparable& other, Node* rot){
+        if(rot == nullptr){
+            return;
+        }
+        else if(other < rot->value){
+            remove(other, rot->left);
+        }
+        else if(other > rot->value){
+            remove(other, rot->right);
+        }
+        // 2 children
+        else if(rot->right != nullptr && rot->left != nullptr){
+            rot->value = find_smallest(rot->right)->value;
+            cout << "smallest is " << rot->value << endl;
+            remove(rot->value, rot->right);
+        }
+        // no children
+        else if(rot->right == nullptr && rot->left == nullptr){
+            if(rot->value == root->value){
+                delete rot;
+            }
+            else{
+                Node* old = find_parent(rot->value, root);
+                if(old->left == rot){
+                    old->left = nullptr;
+                }
+                else if(old->right == rot){
+                    old->right = nullptr;
+                }
+                delete rot;
+            }
+        }
+        // 1 child
+        else{
+            //CANT REMOVE THE ROOT W ONE CHILD
+            Node* old = find_parent(rot->value, root);
+            cout << "parent is " << old->value << endl;
+            if(old->right == rot){
+                if(rot->left != nullptr){
+                    old->right = rot->left;
+                }
+                else{
+                    old->right = rot->right;
+                }
+            }
+
+            else if(old->left == rot){
+                if(rot->left != nullptr){
+                    old->left = rot->left;
+                }
+                else{
+                    old->left = rot->right;
+                }
+            }
+            delete rot;
+            //}
+            
+        }
+    }
+
+
+
+
+    Node* find_parent(Comparable other, Node* rot){
+        cout << "at least im here other is " << other << root->value << rot->value << endl;
+        if(rot == nullptr){
+            return nullptr;
+        }
+        cout << "here1 " << endl;
+        if(rot->left == nullptr && rot->right == nullptr){
+            return nullptr;
+        }
+
+        cout << "here3 " << endl;
+        if((rot->left != nullptr && rot->left->value == other) || (rot->right != nullptr && rot->right->value == other)){
+            return rot;
+        }
+
+        if(rot->value > other){
+            return find_parent(other, rot->left);
+        }
+        else if(rot->value < other){
+            return find_parent(other, rot->right);
+        }
+
+    }

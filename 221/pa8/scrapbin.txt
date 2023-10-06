@@ -1,0 +1,40 @@
+ while (first <= last)
+  { 
+    cout << "comparing " << c[first]<< " and " << c[last] << endl;
+     if(c[first] < pivot)       //if on correct side, 
+        first++;                      //   move over        
+     else if(c[last] > pivot)   //if on correct side, 
+        last--;                       //   move over        
+     else                       // both are on the wrong side  
+     {  
+        swap(c, first, last);         // then swap them, and
+        cout << "SWAP" << endl;
+        first++;                      //   move over
+        last--;                       //   move over 
+     }
+     cout << c << endl;
+  }
+
+
+for(size_t increment = container.size()/2; increment > 0; increment/=2){
+        for(size_t i = increment; increment < container.size(); increment++){
+            Comparable c = container[i];
+            size_t j = i;
+            while(j>=increment && container[j-increment] > c){
+                container[j] = container[j-increment];
+                j-=increment;
+            }
+            container[j] = c;
+        }
+    }
+template <class Comparable>
+vector<Comparable> merge_sort(vector<Comparable>& container){
+    if(container.size() < 2){
+        return container;
+    }
+    else{
+        vector<Comparale> left = merge_sort(container.begin(), container.begin()+(container.size()/2));
+        vector<Comparable> right = merge_sort(container.begin() + (container.size()/2), container.end());
+        return merge(left, right);
+    }
+}

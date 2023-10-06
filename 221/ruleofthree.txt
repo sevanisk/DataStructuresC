@@ -1,0 +1,37 @@
+//rule of three
+
+everyone gets destructor right pretty much
+use size, capacity, array
+
+
+~ArrayList(){
+	delete[] array; // for array
+					// delete is for single object
+}
+
+ArrayList(const ArrayList& other){ // use & for the reference to call by object
+	capacity = other.capacity;
+	sz = other.sz;
+	array = new Object[capacity]
+	for(size_t index = 0; index < sz; index++){
+		array[index] = other.array[index];
+	}
+
+}
+
+
+ArrayList& operator=(const ArrayList& other){
+	if(this!= &other){
+		delete[] array
+		sz = other.sz;
+		capacity = other.capacity;
+
+		array = new Object[capacity];
+		for(size_t index = 0; index < sz; index++){
+			array[index] = other.array[index];
+		}
+
+	}
+
+	return *this
+}

@@ -1,0 +1,423 @@
+#pragma once
+#include <cassert>
+#include <cmath>
+#include <cstddef>
+#include <vector>
+#include <iostream>
+#include <list>
+#include <sstream>
+#include <vector>
+//#include "vertex.h"
+//#include "edge.h" 
+using namespace std;
+
+
+
+class Graph {
+    struct Edge;
+
+    struct Vertex{
+        size_t id;
+        vector<Edge> adjacencies;
+        Vertex():id(0), adjacencies(0){ }
+        Vertex(size_t i): id(i), adjacencies(0){ }
+        void print_adjacencies(){
+            for(Edge e : adjacencies){
+                cout << "howdy";
+                cout << "Edge from " << id << " to " << e.target.id;
+            }
+        }
+    };
+
+    struct Edge{
+        Vertex target;
+        double weight;
+        Edge():target(0), weight(0){ }
+        Edge(Vertex t, double w): target(t), weight(w){ }
+    };
+
+    public:
+        vector<Vertex> vertices;
+        size_t v_num;
+        size_t e_num;
+        Graph(): vertices(0), v_num(0), e_num(0){
+
+        }
+
+        Graph(const Graph& obj): vertices(obj.vertices), v_num(obj.v_num), e_num(obj.e_num){
+
+        }
+
+        Graph& operator=(const Graph& obj){
+            vertices = obj.vertices;
+            v_num = obj.v_num;
+            e_num = obj.e_num;
+            return *this;
+        }
+
+        ~Graph(){
+            v_num = 0;
+            e_num = 0;
+            for(Vertex v : vertices){
+                vertices.pop_back();
+            }
+        }
+
+        size_t vertex_count() const{
+            return v_num;
+        }
+
+        size_t edge_count() const{
+            return e_num;
+        }
+
+        bool contains_vertex(size_t id) const{
+            for(Vertex v: vertices){
+                if(v.id == id){
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        bool contains_edge(size_t u, size_t v) const{
+            for(Vertex vert: vertices){
+                if(vert.id == u){
+                    cout << "here" << endl;
+                    vert.print_adjacencies();
+                    for(Edge e : vert.adjacencies){
+                        if(e.target.id == v){
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        double cost(size_t u, size_t v) const{
+            if(!contains_edge(u, v)){
+                return INFINITY;
+            }
+
+            for(Vertex vert : vertices){
+                if(vert.id == u){
+                    for(Edge e : vert.adjacencies){
+                        if(e.target.id == v){
+                            return e.weight;
+                        }
+                    }
+                }
+            }
+            return 0.0;
+        }
+
+        bool add_vertex(size_t id){
+            if(contains_vertex(id)){
+                return false;
+            }
+
+            Vertex v(id);
+            v_num++;
+            vertices.push_back(v);
+            return true;
+        }
+
+        bool add_edge(size_t u, size_t v, double weight=1){
+            if(!contains_vertex(u) && !contains_vertex(v)){
+                cout << "triggered here" << endl;
+                return false;
+            }
+            if(contains_edge(u, v)){
+                cout << "triggered here" << endl;
+                return false;
+            }
+
+            for(Vertex start : vertices){
+                if(start.id == u){
+                    for(Vertex end : vertices){
+                        if(end.id == v){
+                            start.adjacencies.push_back(Edge(end, weight));
+                            e_num++;
+                            start.print_adjacencies();
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        bool remove_vertex(size_t id){
+            if(!contains_vertex(id)){
+                return false;
+            }
+
+            // erases all other edges to the removed vertex
+            for(Vertex v : vertices){
+                remove_edge(v.id, id);
+            }
+
+
+            // erases vertex and it's adjacency list
+            for(size_t i = 0; i < vertices.size(); i++){
+                if(vertices[i].id == id){
+                    vertices.erase(vertices.begin()+i);
+                }
+            }
+            v_num--;
+            return true;
+        }
+
+        bool remove_edge(size_t u, size_t v){
+            cout << "hi3" << u << v << endl;
+            for(Vertex vert : vertices){
+                if(vert.id == u){
+                    for(size_t j = 0; j < vert.adjacencies.size(); j++){
+                        if(vert.adjacencies[j].target.id == v){
+                            e_num--;
+                            vert.adjacencies.erase(vert.adjacencies.begin()+j);
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        void dijkstra(size_t source_id){
+            cout << "hi2" << source_id << endl;
+        }
+
+        double distance(size_t id) const{
+            cout << "hi" << id << endl;
+            return 0.0;
+        }
+
+        void print_shortest_path(size_t dest_id, std::ostream& os=std::cout) const{
+            os << "hi" << dest_id;
+        }
+
+
+ // TODO(student): Task 2: implement Dijkstra's algorithm
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#pragma once
+#include <cassert>
+#include <cmath>
+#include <cstddef>
+#include <vector>
+#include <iostream>
+#include <list>
+#include <sstream>
+#include <unordered_map>
+
+using namespace std;
+
+
+
+class Graph {
+    struct Edge;
+
+    struct Vertex{
+        size_t id;
+        //vector<Edge> adjacencies;
+        Vertex():id(0), adjacencies(0){ }
+        Vertex(size_t i): id(i), adjacencies(0){ }
+        void print_adjacencies(){
+            for(Edge e : adjacencies){
+                cout << "howdy";
+                cout << "Edge from " << id << " to " << e.target.id;
+            }
+        }
+    };
+
+    struct Edge{
+        Vertex target;
+        double weight;
+        Edge():target(0), weight(0){ }
+        Edge(Vertex t, double w): target(t), weight(w){ }
+    };
+
+    public:
+        Map m;
+        size_t v_num;
+        size_t e_num;
+        Graph(): m(Map{}), v_num(0), e_num(0){
+
+        }
+
+        Graph(const Graph& obj): m(obj.m), v_num(obj.v_num), e_num(obj.e_num){
+
+        }
+
+        Graph& operator=(const Graph& obj){
+            m = obj.m;
+            v_num = obj.v_num;
+            e_num = obj.e_num;
+            return *this;
+        }
+
+        ~Graph(){
+            v_num = 0;
+            e_num = 0;
+            for(Vertex v : vertices){
+                vertices.pop_back();
+            }
+        }
+
+        size_t vertex_count() const{
+            return v_num;
+        }
+
+        size_t edge_count() const{
+            return e_num;
+        }
+
+        bool contains_vertex(size_t id) const{
+            for(Vertex v: vertices){
+                if(v.id == id){
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        bool contains_edge(size_t u, size_t v) const{
+            for(Vertex vert: vertices){
+                if(vert.id == u){
+                    cout << "here" << endl;
+                    vert.print_adjacencies();
+                    for(Edge e : vert.adjacencies){
+                        if(e.target.id == v){
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        double cost(size_t u, size_t v) const{
+            if(!contains_edge(u, v)){
+                return INFINITY;
+            }
+
+            for(Vertex vert : vertices){
+                if(vert.id == u){
+                    for(Edge e : vert.adjacencies){
+                        if(e.target.id == v){
+                            return e.weight;
+                        }
+                    }
+                }
+            }
+            return 0.0;
+        }
+
+        bool add_vertex(size_t id){
+            if(contains_vertex(id)){
+                return false;
+            }
+
+            Vertex v(id);
+            v_num++;
+            vertices.push_back(v);
+            return true;
+        }
+
+        bool add_edge(size_t u, size_t v, double weight=1){
+            if(!contains_vertex(u) && !contains_vertex(v)){
+                cout << "triggered here" << endl;
+                return false;
+            }
+            if(contains_edge(u, v)){
+                cout << "triggered here" << endl;
+                return false;
+            }
+
+            for(Vertex start : vertices){
+                if(start.id == u){
+                    for(Vertex end : vertices){
+                        if(end.id == v){
+                            start.adjacencies.push_back(Edge(end, weight));
+                            e_num++;
+                            start.print_adjacencies();
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        bool remove_vertex(size_t id){
+            if(!contains_vertex(id)){
+                return false;
+            }
+
+            // erases all other edges to the removed vertex
+            for(Vertex v : vertices){
+                remove_edge(v.id, id);
+            }
+
+
+            // erases vertex and it's adjacency list
+            for(size_t i = 0; i < vertices.size(); i++){
+                if(vertices[i].id == id){
+                    vertices.erase(vertices.begin()+i);
+                }
+            }
+            v_num--;
+            return true;
+        }
+
+        bool remove_edge(size_t u, size_t v){
+            cout << "hi3" << u << v << endl;
+            for(Vertex vert : vertices){
+                if(vert.id == u){
+                    for(size_t j = 0; j < vert.adjacencies.size(); j++){
+                        if(vert.adjacencies[j].target.id == v){
+                            e_num--;
+                            vert.adjacencies.erase(vert.adjacencies.begin()+j);
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        void dijkstra(size_t source_id){
+            cout << "hi2" << source_id << endl;
+        }
+
+        double distance(size_t id) const{
+            cout << "hi" << id << endl;
+            return 0.0;
+        }
+
+        void print_shortest_path(size_t dest_id, std::ostream& os=std::cout) const{
+            os << "hi" << dest_id;
+        }
+
+
+ // TODO(student): Task 2: implement Dijkstra's algorithm
+};

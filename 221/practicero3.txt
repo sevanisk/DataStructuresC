@@ -1,0 +1,41 @@
+Fox(const Fox& other){
+	f = new int{};
+	f = other.f;
+}
+
+~Fox(){
+	delete f;
+}
+
+Fox& operator=(const Fox& other){
+	if(this != &other){
+		delete f;
+		f = new int{};
+		f = other.f;
+	}
+
+	return *this;
+}
+
+Skulk(const Skulk& other){
+	size = other.size;
+	f = new Fox[size]{};
+	for(size_t i = 0; i < size; i++){
+		f[i] = other.f[i];
+	}
+}
+
+~Skulk(){
+	delete[] f;
+}
+
+Skulk& operator=(const Skulk& other){
+	if(this != &other){
+		delete[] f;
+		f = new Fox[size]{};
+		for(size_t i = 0; i < size; i++){
+			f[i] = other.f[i];
+		}
+	}
+	return *this;
+}

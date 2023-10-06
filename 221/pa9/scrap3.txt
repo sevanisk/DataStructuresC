@@ -1,0 +1,85 @@
+class Graph {
+    struct Vertex;
+    struct Vertex{
+        size_t id;  
+        unordered_map<Vertex, size_t> adjacencies;
+        Vertex():id(0), adjacencies({}){ }
+        Vertex(size_t i): id(i), adjacencies({}){ }
+    };
+
+    public:
+        vector<Vertex> vertices;
+        size_t v_num;
+        size_t e_num;
+        Graph(): vertices(0), v_num(0), e_num(0){
+
+        }
+
+        Graph(const Graph& obj): vertices(obj.vertices), v_num(obj.v_num), e_num(obj.e_num){
+
+        }
+
+        Graph& operator=(const Graph& obj){
+            vertices = obj.vertices;
+            v_num = obj.v_num;
+            e_num = obj.e_num;
+            return *this;
+        }
+
+        ~Graph(){
+            v_num = 0;
+            e_num = 0;
+            vertices.clear();
+        }
+
+        size_t vertex_count() const{
+            return v_num;
+        }
+
+        size_t edge_count() const{
+            return e_num;
+        }
+
+        bool contains_vertex(size_t id) const{
+
+        }
+
+        bool contains_edge(size_t u, size_t v) const{
+            
+        }
+
+        double cost(size_t u, size_t v) const{
+            return 0.0;
+        }
+
+        bool add_vertex(size_t id){
+            
+        }
+
+        bool add_edge(size_t u, size_t v, double weight=1){
+
+        }
+
+        bool remove_vertex(size_t id){
+
+        }
+
+        bool remove_edge(size_t u, size_t v){
+
+        }
+
+        void dijkstra(size_t source_id){
+            cout << "hi2" << source_id << endl;
+        }
+
+        double distance(size_t id) const{
+            cout << "hi" << id << endl;
+            return 0.0;
+        }
+
+        void print_shortest_path(size_t dest_id, std::ostream& os=std::cout) const{
+            os << "hi" << dest_id;
+        }
+
+ // TODO(student): Task 2: implement Dijkstra's algorithm
+};
